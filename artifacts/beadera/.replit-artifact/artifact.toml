@@ -1,0 +1,28 @@
+kind = "web"
+previewPath = "/"
+title = "Beadera"
+description = "A full-stack handmade bead accessories storefront with emotional shopping, workshop enquiries, a persistent cart, and a protected product management area."
+version = "1.0.0"
+id = "artifacts/beadera"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 23942
+
+[services.development]
+run = "pnpm --filter @workspace/beadera run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/beadera", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/beadera/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "23942"
+BASE_PATH = "/"

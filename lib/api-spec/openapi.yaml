@@ -10,6 +10,12 @@ servers:
 tags:
   - name: health
     description: Health operations
+  - name: products
+    description: Public product catalogue
+  - name: workshops
+    description: Public workshop enquiries
+  - name: admin
+    description: Protected catalogue and enquiry management
 paths:
   /healthz:
     get:
@@ -24,6 +30,247 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+  /products:
+    get:
+      operationId: listProducts
+      tags: [products]
+      summary: List active products
+      parameters:
+        - name: category
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: featured
+          in: query
+          required: false
+          schema:
+            type: boolean
+      responses:
+        "200":
+          description: Product list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Product"
+  /products/{slug}:
+    get:
+      operationId: getProduct
+      tags: [products]
+      summary: Get an active product by slug
+      parameters:
+        - name: slug
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Product
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Product"
+        "404":
+          description: Product not found
+  /workshop-enquiries:
+    post:
+      operationId: createWorkshopEnquiry
+      tags: [workshops]
+      summary: Submit a workshop enquiry
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/WorkshopEnquiryInput"
+      responses:
+        "201":
+          description: Enquiry created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WorkshopEnquiry"
+        "400":
+          description: Invalid enquiry
+  /admin/session:
+    get:
+      operationId: getAdminSession
+      tags: [admin]
+      summary: Get current admin session
+      responses:
+        "200":
+          description: Session state
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AdminSession"
+  /admin/login:
+    post:
+      operationId: adminLogin
+      tags: [admin]
+      summary: Log in to the admin area
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AdminLoginInput"
+      responses:
+        "200":
+          description: Logged in
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AdminSession"
+        "401":
+          description: Invalid credentials
+  /admin/logout:
+    post:
+      operationId: adminLogout
+      tags: [admin]
+      summary: End the admin session
+      responses:
+        "204":
+          description: Logged out
+  /admin/summary:
+    get:
+      operationId: getAdminSummary
+      tags: [admin]
+      summary: Get admin overview counts
+      responses:
+        "200":
+          description: Dashboard summary
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AdminSummary"
+        "401":
+          description: Admin authentication required
+  /admin/products:
+    get:
+      operationId: listAdminProducts
+      tags: [admin]
+      summary: List all products for management
+      responses:
+        "200":
+          description: Product list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Product"
+        "401":
+          description: Admin authentication required
+    post:
+      operationId: createProduct
+      tags: [admin]
+      summary: Create a product
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProductInput"
+      responses:
+        "201":
+          description: Product created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Product"
+        "401":
+          description: Admin authentication required
+  /admin/products/{id}:
+    patch:
+      operationId: updateProduct
+      tags: [admin]
+      summary: Update a product
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProductUpdate"
+      responses:
+        "200":
+          description: Product updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Product"
+        "401":
+          description: Admin authentication required
+        "404":
+          description: Product not found
+    delete:
+      operationId: deleteProduct
+      tags: [admin]
+      summary: Delete a product
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Product deleted
+        "401":
+          description: Admin authentication required
+  /admin/workshop-enquiries:
+    get:
+      operationId: listWorkshopEnquiries
+      tags: [admin]
+      summary: List workshop enquiries
+      responses:
+        "200":
+          description: Enquiry list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/WorkshopEnquiry"
+        "401":
+          description: Admin authentication required
+  /admin/workshop-enquiries/{id}:
+    patch:
+      operationId: updateWorkshopEnquiry
+      tags: [admin]
+      summary: Update workshop enquiry status
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/WorkshopEnquiryUpdate"
+      responses:
+        "200":
+          description: Enquiry updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WorkshopEnquiry"
+        "401":
+          description: Admin authentication required
+        "404":
+          description: Enquiry not found
 components:
   schemas:
     HealthStatus:
@@ -33,4 +280,235 @@ components:
           type: string
       required:
         - status
+    Product:
+      type: object
+      required:
+        - id
+        - name
+        - slug
+        - description
+        - price
+        - category
+        - imageUrl
+        - additionalImages
+        - isFeatured
+        - isActive
+        - sortOrder
+        - createdAt
+        - updatedAt
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        slug:
+          type: string
+        description:
+          type: string
+        price:
+          type: number
+        originalPrice:
+          type: ["number", "null"]
+        category:
+          type: string
+        imageUrl:
+          type: string
+        additionalImages:
+          type: array
+          items:
+            type: string
+        badge:
+          type: ["string", "null"]
+        isFeatured:
+          type: boolean
+        isActive:
+          type: boolean
+        sortOrder:
+          type: integer
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    ProductInput:
+      type: object
+      required:
+        - name
+        - description
+        - price
+        - category
+        - imageUrl
+      properties:
+        name:
+          type: string
+          minLength: 1
+        description:
+          type: string
+        price:
+          type: number
+          minimum: 0
+        originalPrice:
+          type: ["number", "null"]
+        category:
+          type: string
+        imageUrl:
+          type: string
+          minLength: 1
+        additionalImages:
+          type: array
+          items:
+            type: string
+        badge:
+          type: ["string", "null"]
+        isFeatured:
+          type: boolean
+        isActive:
+          type: boolean
+        sortOrder:
+          type: integer
+    ProductUpdate:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+        description:
+          type: string
+        price:
+          type: number
+          minimum: 0
+        originalPrice:
+          type: ["number", "null"]
+        category:
+          type: string
+        imageUrl:
+          type: string
+        additionalImages:
+          type: array
+          items:
+            type: string
+        badge:
+          type: ["string", "null"]
+        isFeatured:
+          type: boolean
+        isActive:
+          type: boolean
+        sortOrder:
+          type: integer
+    WorkshopEnquiry:
+      type: object
+      required:
+        - id
+        - name
+        - phone
+        - email
+        - workshopType
+        - peopleCount
+        - preferredDate
+        - preferredTime
+        - message
+        - status
+        - createdAt
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        phone:
+          type: string
+        email:
+          type: string
+        workshopType:
+          type: string
+        peopleCount:
+          type: integer
+        preferredDate:
+          type: string
+        preferredTime:
+          type: string
+        message:
+          type: string
+        status:
+          type: string
+          enum: [pending, contacted, confirmed, completed]
+        createdAt:
+          type: string
+          format: date-time
+    WorkshopEnquiryInput:
+      type: object
+      required:
+        - name
+        - phone
+        - email
+        - workshopType
+        - peopleCount
+        - preferredDate
+        - preferredTime
+      properties:
+        name:
+          type: string
+          minLength: 1
+        phone:
+          type: string
+          minLength: 7
+        email:
+          type: string
+          format: email
+        workshopType:
+          type: string
+        peopleCount:
+          type: integer
+          minimum: 1
+        preferredDate:
+          type: string
+        preferredTime:
+          type: string
+        message:
+          type: string
+    WorkshopEnquiryUpdate:
+      type: object
+      required:
+        - status
+      properties:
+        status:
+          type: string
+          enum: [pending, contacted, confirmed, completed]
+    AdminLoginInput:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          minLength: 1
+    AdminSession:
+      type: object
+      required:
+        - authenticated
+      properties:
+        authenticated:
+          type: boolean
+        email:
+          type: ["string", "null"]
+    AdminSummary:
+      type: object
+      required:
+        - totalProducts
+        - activeProducts
+        - featuredProducts
+        - workshopEnquiries
+      properties:
+        totalProducts:
+          type: integer
+        activeProducts:
+          type: integer
+        featuredProducts:
+          type: integer
+        workshopEnquiries:
+          type: integer
 

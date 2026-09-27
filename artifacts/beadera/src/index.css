@@ -1,0 +1,107 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;1,500;1,600&display=swap');
+@import 'tailwindcss';
+@import 'tw-animate-css';
+
+@theme inline {
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+  --color-destructive: hsl(var(--destructive));
+  --font-sans: var(--app-font-sans);
+  --font-serif: var(--app-font-serif);
+  --font-mono: var(--app-font-mono);
+}
+
+:root {
+  --background: 36 53% 96%;
+  --foreground: 341 44% 17%;
+  --border: 341 23% 85%;
+  --input: 341 23% 85%;
+  --ring: 342 57% 35%;
+  --card: 36 68% 98%;
+  --card-foreground: 341 44% 17%;
+  --primary: 342 57% 35%;
+  --primary-foreground: 36 53% 96%;
+  --secondary: 17 51% 90%;
+  --secondary-foreground: 341 44% 17%;
+  --muted: 32 28% 91%;
+  --muted-foreground: 341 16% 47%;
+  --accent: 38 82% 58%;
+  --accent-foreground: 341 44% 17%;
+  --destructive: 4 65% 48%;
+  --app-font-sans: 'DM Sans', sans-serif;
+  --app-font-serif: 'Playfair Display', serif;
+  --app-font-mono: 'DM Mono', monospace;
+  --radius: 1rem;
+  --shadow-soft: 0 18px 50px rgba(94, 27, 47, .10);
+}
+
+.dark {
+  --background: 341 44% 12%;
+  --foreground: 36 53% 96%;
+  --border: 341 24% 27%;
+  --input: 341 24% 27%;
+  --ring: 38 82% 58%;
+  --card: 341 36% 17%;
+  --card-foreground: 36 53% 96%;
+  --primary: 38 82% 58%;
+  --primary-foreground: 341 44% 17%;
+  --secondary: 341 27% 24%;
+  --secondary-foreground: 36 53% 96%;
+  --muted: 341 24% 22%;
+  --muted-foreground: 36 19% 71%;
+  --accent: 342 57% 64%;
+  --accent-foreground: 341 44% 17%;
+  --destructive: 4 65% 58%;
+}
+
+@layer base {
+  * { @apply border-border; }
+  html { scroll-behavior: smooth; }
+  body { @apply bg-background text-foreground font-sans antialiased; }
+  button, a, input, select, textarea { -webkit-tap-highlight-color: transparent; }
+}
+
+@keyframes rise { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes float { 0%, 100% { transform: translateY(0) rotate(-2deg); } 50% { transform: translateY(-8px) rotate(2deg); } }
+@keyframes marquee { to { transform: translateX(-50%); } }
+@keyframes shimmer { from { background-position: 200% 0; } to { background-position: -200% 0; } }
+
+.reveal { animation: rise .7s cubic-bezier(.22,.8,.28,1) both; }
+.reveal-delay-1 { animation-delay: .1s; }
+.reveal-delay-2 { animation-delay: .2s; }
+.reveal-delay-3 { animation-delay: .3s; }
+.floaty { animation: float 5s ease-in-out infinite; }
+.marquee-track { animation: marquee 28s linear infinite; }
+.paper-grain::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  opacity: .045;
+  z-index: 50;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.35'/%3E%3C/svg%3E");
+}
+.serif { font-family: var(--app-font-serif); }
+.mono { font-family: var(--app-font-mono); }
+.soft-shadow { box-shadow: var(--shadow-soft); }
+.skeleton { background: linear-gradient(100deg, hsl(var(--muted)) 30%, hsl(var(--card)) 50%, hsl(var(--muted)) 70%); background-size: 200% 100%; animation: shimmer 1.6s linear infinite; }
+.admin-input { margin-top: .5rem; width: 100%; border-bottom: 1px solid #dec5c5; background: transparent; padding: .65rem 0; font-size: .875rem; outline: none; }
+.admin-input:focus { border-color: #762338; }
+.admin-nav { display: flex; width: 100%; align-items: center; justify-content: center; gap: .55rem; border-radius: .75rem; padding: .7rem .8rem; font-size: .72rem; font-weight: 600; text-transform: uppercase; letter-spacing: .12em; color: #795761; transition: background-color .2s, color .2s; }
+.admin-nav:hover, .admin-nav-active { background: #f3d9d8; color: #762338; }
+@media (min-width: 768px) {
+  .admin-nav { justify-content: flex-start; }
+}
