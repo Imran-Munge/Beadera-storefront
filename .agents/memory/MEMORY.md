@@ -1,0 +1,1 @@
+- [Generated client browser types](client-dom-iterable.md) — the API client needs both DOM and DOM iterable compiler libs.
