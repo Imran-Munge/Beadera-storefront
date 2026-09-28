@@ -126,8 +126,9 @@ export default function Storefront() {
   };
   const submitWorkshop = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const form = new FormData(event.currentTarget);
-    workshopMutation.mutate({ data: { name: String(form.get('name')), phone: String(form.get('phone')), email: String(form.get('email')), workshopType: String(form.get('workshopType')), peopleCount: Number(form.get('peopleCount')), preferredDate: String(form.get('preferredDate')), preferredTime: String(form.get('preferredTime') ?? 'afternoon'), message: String(form.get('message') ?? '') } }, { onSuccess: () => { setWorkshopSent(true); event.currentTarget.reset(); queryClient.invalidateQueries({ queryKey: getListWorkshopEnquiriesQueryKey() }); } });
+    const formElement = event.currentTarget;
+    const form = new FormData(formElement);
+    workshopMutation.mutate({ data: { name: String(form.get('name')), phone: String(form.get('phone')), email: String(form.get('email')), workshopType: String(form.get('workshopType')), peopleCount: Number(form.get('peopleCount')), preferredDate: String(form.get('preferredDate')), preferredTime: String(form.get('preferredTime') ?? 'afternoon'), message: String(form.get('message') ?? '') } }, { onSuccess: () => { formElement.reset(); setWorkshopSent(true); queryClient.invalidateQueries({ queryKey: getListWorkshopEnquiriesQueryKey() }); } });
   };
 
   return (
