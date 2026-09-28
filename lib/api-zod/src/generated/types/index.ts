@@ -14,6 +14,8 @@ export * from './listProductsParams';
 export * from './product';
 export * from './productInput';
 export * from './productUpdate';
+export * from './uploadUrlRequest';
+export * from './uploadUrlResponse';
 export * from './workshopEnquiry';
 export * from './workshopEnquiryInput';
 export * from './workshopEnquiryStatus';

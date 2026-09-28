@@ -16,6 +16,8 @@ tags:
     description: Public workshop enquiries
   - name: admin
     description: Protected catalogue and enquiry management
+  - name: storage
+    description: Protected product image uploads and object serving
 paths:
   /healthz:
     get:
@@ -95,6 +97,53 @@ paths:
                 $ref: "#/components/schemas/WorkshopEnquiry"
         "400":
           description: Invalid enquiry
+  /storage/uploads/request-url:
+    post:
+      operationId: requestUploadUrl
+      tags: [storage]
+      summary: Request a presigned product image upload URL
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UploadUrlRequest"
+      responses:
+        "200":
+          description: Upload URL generated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UploadUrlResponse"
+        "400":
+          description: Invalid upload metadata
+        "401":
+          description: Admin authentication required
+        "500":
+          description: Failed to generate upload URL
+  /storage/objects/{objectPath}:
+    get:
+      operationId: getStorageObject
+      tags: [storage]
+      summary: Serve an uploaded product image
+      parameters:
+        - name: objectPath
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Uploaded object
+          content:
+            "*/*":
+              schema:
+                type: string
+                format: binary
+        "404":
+          description: Object not found
+        "500":
+          description: Failed to serve object
   /admin/session:
     get:
       operationId: getAdminSession
@@ -280,6 +329,35 @@ components:
           type: string
       required:
         - status
+    UploadUrlRequest:
+      type: object
+      required:
+        - name
+        - size
+        - contentType
+      properties:
+        name:
+          type: string
+          minLength: 1
+        size:
+          type: integer
+          minimum: 1
+        contentType:
+          type: string
+          minLength: 1
+    UploadUrlResponse:
+      type: object
+      required:
+        - uploadURL
+        - objectPath
+      properties:
+        uploadURL:
+          type: string
+          format: uri
+        objectPath:
+          type: string
+        metadata:
+          $ref: "#/components/schemas/UploadUrlRequest"
     Product:
       type: object
       required:

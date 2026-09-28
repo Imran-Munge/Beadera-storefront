@@ -1,1 +1,2 @@
 - [Generated client browser types](client-dom-iterable.md) — the API client needs both DOM and DOM iterable compiler libs.
+- [Product image uploads](object-storage-uploads.md) — use protected presigned uploads and serve stored product images through the API object route.

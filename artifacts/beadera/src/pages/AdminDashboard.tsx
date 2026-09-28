@@ -2,8 +2,8 @@ import { useEffect, useMemo, useState, type FormEvent } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { useLocation } from 'wouter';
 import {
-  Archive, Edit3, ExternalLink, LayoutDashboard,
-  LogOut, Package, Plus, Save, Sparkles, Trash2, Users, X,
+  Archive, Edit3, ExternalLink, ImagePlus, LayoutDashboard,
+  LoaderCircle, LogOut, Package, Plus, Save, Sparkles, Trash2, Users, X,
 } from 'lucide-react';
 import {
   getGetAdminSessionQueryKey, getGetAdminSummaryQueryKey, getListAdminProductsQueryKey,
@@ -20,8 +20,37 @@ function ProductForm({ product, onClose, onSaved }: { product?: Product; onClose
   const create = useCreateProduct();
   const update = useUpdateProduct();
   const [form, setForm] = useState<ProductInput>(product ? { name: product.name, description: product.description, price: product.price, originalPrice: product.originalPrice ?? null, category: product.category, imageUrl: product.imageUrl, additionalImages: product.additionalImages, badge: product.badge ?? '', isFeatured: product.isFeatured, isActive: product.isActive, sortOrder: product.sortOrder } : emptyForm);
+  const [uploading, setUploading] = useState<'primary' | 'additional' | null>(null);
+  const [uploadError, setUploadError] = useState('');
   const set = (key: keyof ProductInput, value: string | number | boolean | string[] | null) => setForm((current) => ({ ...current, [key]: value }));
   const saving = create.isPending || update.isPending;
+  const uploadImage = async (file: File, destination: 'primary' | 'additional') => {
+    setUploadError('');
+    if (!file.type.startsWith('image/') || file.size > 10 * 1024 * 1024) {
+      setUploadError('Please choose an image file smaller than 10 MB.');
+      return;
+    }
+    setUploading(destination);
+    try {
+      const request = await fetch('/api/storage/uploads/request-url', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ name: file.name, size: file.size, contentType: file.type }),
+      });
+      const payload = await request.json() as { uploadURL?: string; objectPath?: string; error?: string };
+      if (!request.ok || !payload.uploadURL || !payload.objectPath) throw new Error(payload.error || 'Could not prepare upload.');
+      const upload = await fetch(payload.uploadURL, { method: 'PUT', headers: { 'Content-Type': file.type }, body: file });
+      if (!upload.ok) throw new Error('Could not upload the image.');
+      const imageUrl = `/api/storage${payload.objectPath}`;
+      if (destination === 'primary') set('imageUrl', imageUrl);
+      else set('additionalImages', [...(form.additionalImages ?? []), imageUrl]);
+    } catch (error) {
+      setUploadError(error instanceof Error ? error.message : 'Could not upload the image.');
+    } finally {
+      setUploading(null);
+    }
+  };
   const submit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = { ...form, price: Number(form.price), originalPrice: form.originalPrice ? Number(form.originalPrice) : null, sortOrder: Number(form.sortOrder ?? 0), badge: form.badge || null };
@@ -31,7 +60,30 @@ function ProductForm({ product, onClose, onSaved }: { product?: Product; onClose
   };
   return (
     <div className="fixed inset-0 z-40 flex items-center justify-center bg-[#4b1728]/40 p-4 backdrop-blur-sm" data-testid="modal-product-form">
-      <form onSubmit={submit} className="max-h-[92vh] w-full max-w-2xl overflow-y-auto rounded-[1.5rem] bg-[#fff8ef] p-6 shadow-2xl sm:p-9" data-testid="form-product"><div className="flex items-start justify-between"><div><span className="mono text-[10px] uppercase tracking-[.22em] text-[#b36b37]">{product ? 'edit the piece' : 'new piece'}</span><h2 className="serif mt-2 text-3xl text-[#5e1b2f]">{product ? product.name : 'Add a product'}</h2></div><button type="button" onClick={onClose} className="rounded-full p-2 text-[#762338]" data-testid="button-close-product-form"><X size={18} /></button></div><div className="mt-8 grid gap-5 sm:grid-cols-2"><label className="text-xs font-semibold text-[#795761] sm:col-span-2">name<input required value={form.name} onChange={(e) => set('name', e.target.value)} className="admin-input" data-testid="input-product-name" /></label><label className="text-xs font-semibold text-[#795761] sm:col-span-2">description<textarea required rows={3} value={form.description} onChange={(e) => set('description', e.target.value)} className="admin-input resize-none" data-testid="textarea-product-description" /></label><label className="text-xs font-semibold text-[#795761]">price (INR)<input required min="0" type="number" value={form.price} onChange={(e) => set('price', Number(e.target.value))} className="admin-input" data-testid="input-product-price" /></label><label className="text-xs font-semibold text-[#795761]">original price<input min="0" type="number" value={form.originalPrice ?? ''} onChange={(e) => set('originalPrice', e.target.value ? Number(e.target.value) : null)} className="admin-input" data-testid="input-product-original-price" /></label><label className="text-xs font-semibold text-[#795761]">category<select value={form.category} onChange={(e) => set('category', e.target.value)} className="admin-input" data-testid="select-product-category"><option>Bracelets</option><option>Earrings</option><option>Necklaces</option><option>Charms</option><option>Rings</option><option>Sets</option></select></label><label className="text-xs font-semibold text-[#795761]">badge<input value={form.badge ?? ''} onChange={(e) => set('badge', e.target.value)} placeholder="new, beloved..." className="admin-input" data-testid="input-product-badge" /></label><label className="text-xs font-semibold text-[#795761] sm:col-span-2">image URL<input value={form.imageUrl} onChange={(e) => set('imageUrl', e.target.value)} placeholder="https://..." className="admin-input" data-testid="input-product-image-url" /></label><label className="flex items-center gap-3 text-xs font-semibold text-[#795761]"><input type="checkbox" checked={Boolean(form.isFeatured)} onChange={(e) => set('isFeatured', e.target.checked)} className="h-4 w-4 accent-[#762338]" data-testid="checkbox-product-featured" /> featured piece</label><label className="flex items-center gap-3 text-xs font-semibold text-[#795761]"><input type="checkbox" checked={Boolean(form.isActive)} onChange={(e) => set('isActive', e.target.checked)} className="h-4 w-4 accent-[#762338]" data-testid="checkbox-product-active" /> visible in shop</label></div>{(create.isError || update.isError) && <p className="mt-5 rounded-lg bg-[#fff0eb] p-3 text-xs text-[#a53d48]" data-testid="status-product-save-error">Could not save this piece. Please check the fields and try again.</p>}<div className="mt-8 flex justify-end gap-3 border-t border-[#ead7d0] pt-6"><button type="button" onClick={onClose} className="rounded-full px-5 py-3 text-xs font-semibold uppercase tracking-[.16em] text-[#795761]" data-testid="button-cancel-product">cancel</button><button type="submit" disabled={saving} className="flex items-center gap-2 rounded-full bg-[#762338] px-6 py-3 text-xs font-semibold uppercase tracking-[.16em] text-[#fff8ef] disabled:opacity-60" data-testid="button-save-product"><Save size={14} />{saving ? 'saving...' : product ? 'save changes' : 'add piece'}</button></div></form>
+      <form onSubmit={submit} className="max-h-[92vh] w-full max-w-2xl overflow-y-auto rounded-[1.5rem] bg-[#fff8ef] p-6 shadow-2xl sm:p-9" data-testid="form-product">
+        <div className="flex items-start justify-between"><div><span className="mono text-[10px] uppercase tracking-[.22em] text-[#b36b37]">{product ? 'edit the piece' : 'new piece'}</span><h2 className="serif mt-2 text-3xl text-[#5e1b2f]">{product ? product.name : 'Add a product'}</h2></div><button type="button" onClick={onClose} className="rounded-full p-2 text-[#762338]" data-testid="button-close-product-form"><X size={18} /></button></div>
+        <div className="mt-8 grid gap-5 sm:grid-cols-2">
+          <label className="text-xs font-semibold text-[#795761] sm:col-span-2">name<input required value={form.name} onChange={(e) => set('name', e.target.value)} className="admin-input" data-testid="input-product-name" /></label>
+          <label className="text-xs font-semibold text-[#795761] sm:col-span-2">description<textarea required rows={3} value={form.description} onChange={(e) => set('description', e.target.value)} className="admin-input resize-none" data-testid="textarea-product-description" /></label>
+          <label className="text-xs font-semibold text-[#795761]">price (INR)<input required min="0" type="number" value={form.price} onChange={(e) => set('price', Number(e.target.value))} className="admin-input" data-testid="input-product-price" /></label>
+          <label className="text-xs font-semibold text-[#795761]">original price<input min="0" type="number" value={form.originalPrice ?? ''} onChange={(e) => set('originalPrice', e.target.value ? Number(e.target.value) : null)} className="admin-input" data-testid="input-product-original-price" /></label>
+          <label className="text-xs font-semibold text-[#795761]">category<select value={form.category} onChange={(e) => set('category', e.target.value)} className="admin-input" data-testid="select-product-category"><option>Bracelets</option><option>Earrings</option><option>Necklaces</option><option>Charms</option><option>Rings</option><option>Sets</option></select></label>
+          <label className="text-xs font-semibold text-[#795761]">badge<input value={form.badge ?? ''} onChange={(e) => set('badge', e.target.value)} placeholder="new, beloved..." className="admin-input" data-testid="input-product-badge" /></label>
+          <div className="sm:col-span-2">
+            <label className="text-xs font-semibold text-[#795761]">image URL<input value={form.imageUrl} onChange={(e) => set('imageUrl', e.target.value)} placeholder="https://... or upload below" className="admin-input" data-testid="input-product-image-url" /></label>
+            <div className="mt-4 grid gap-4 rounded-2xl border border-dashed border-[#dec5c5] bg-[#fffaf4] p-4 sm:grid-cols-[5rem_1fr] sm:items-center">
+              {form.imageUrl ? <img src={form.imageUrl} alt="Primary product preview" className="h-20 w-20 rounded-xl object-cover" /> : <div className="flex h-20 w-20 items-center justify-center rounded-xl bg-[#f3d9d8] text-[#762338]"><ImagePlus size={22} /></div>}
+              <div><p className="text-sm font-semibold text-[#5e1b2f]">Upload a primary image</p><p className="mt-1 text-xs leading-5 text-[#8a6771]">JPG, PNG, WEBP or GIF · up to 10 MB. Uploads go directly to secure product storage.</p><label className="mt-3 inline-flex cursor-pointer items-center gap-2 rounded-full bg-[#f3d9d8] px-4 py-2 text-[10px] font-semibold uppercase tracking-[.14em] text-[#762338] transition hover:bg-[#edc4c8]"><ImagePlus size={14} /> {uploading === 'primary' ? 'uploading...' : 'choose image'}<input type="file" accept="image/*" className="sr-only" disabled={Boolean(uploading)} onChange={(e) => { const file = e.target.files?.[0]; if (file) void uploadImage(file, 'primary'); e.currentTarget.value = ''; }} data-testid="input-product-image-upload" /></label></div>
+            </div>
+          </div>
+          <div className="sm:col-span-2"><label className="text-xs font-semibold text-[#795761]">additional images (optional)<input type="file" accept="image/*" multiple className="admin-input file:mr-3 file:rounded-full file:border-0 file:bg-[#f3d9d8] file:px-3 file:py-2 file:text-[10px] file:font-semibold file:uppercase file:text-[#762338]" disabled={Boolean(uploading)} onChange={(e) => { Array.from(e.target.files ?? []).forEach((file) => void uploadImage(file, 'additional')); e.currentTarget.value = ''; }} data-testid="input-product-additional-images-upload" /></label>{(form.additionalImages ?? []).length > 0 && <div className="mt-3 flex flex-wrap gap-2">{(form.additionalImages ?? []).map((image, index) => <img key={`${image}-${index}`} src={image} alt={`Additional product preview ${index + 1}`} className="h-16 w-16 rounded-lg object-cover" />)}</div>}</div>
+          <label className="flex items-center gap-3 text-xs font-semibold text-[#795761]"><input type="checkbox" checked={Boolean(form.isFeatured)} onChange={(e) => set('isFeatured', e.target.checked)} className="h-4 w-4 accent-[#762338]" data-testid="checkbox-product-featured" /> featured piece</label>
+          <label className="flex items-center gap-3 text-xs font-semibold text-[#795761]"><input type="checkbox" checked={Boolean(form.isActive)} onChange={(e) => set('isActive', e.target.checked)} className="h-4 w-4 accent-[#762338]" data-testid="checkbox-product-active" /> visible in shop</label>
+        </div>
+        {uploadError && <p className="mt-5 rounded-lg bg-[#fff0eb] p-3 text-xs text-[#a53d48]" data-testid="status-product-upload-error">{uploadError}</p>}
+        {(create.isError || update.isError) && <p className="mt-5 rounded-lg bg-[#fff0eb] p-3 text-xs text-[#a53d48]" data-testid="status-product-save-error">Could not save this piece. Please check the fields and try again.</p>}
+        <div className="mt-8 flex justify-end gap-3 border-t border-[#ead7d0] pt-6"><button type="button" onClick={onClose} className="rounded-full px-5 py-3 text-xs font-semibold uppercase tracking-[.16em] text-[#795761]" data-testid="button-cancel-product">cancel</button><button type="submit" disabled={saving || Boolean(uploading)} className="flex items-center gap-2 rounded-full bg-[#762338] px-6 py-3 text-xs font-semibold uppercase tracking-[.16em] text-[#fff8ef] disabled:opacity-60" data-testid="button-save-product">{uploading ? <LoaderCircle size={14} className="animate-spin" /> : <Save size={14} />}{saving ? 'saving...' : uploading ? 'uploading...' : product ? 'save changes' : 'add piece'}</button></div>
+      </form>
     </div>
   );
 }
