@@ -1,0 +1,860 @@
+UPGRADE THE EXISTING BEADERA WEBSITE.
+
+IMPORTANT:
+Do NOT rebuild the website from scratch.
+Do NOT replace the existing product system, admin panel, database, routing, or working functionality.
+
+First inspect the ENTIRE existing codebase and understand the current design, components, product system, navigation, admin functionality and responsive behavior.
+
+Then upgrade the existing website while preserving everything that already works.
+
+The goal is to make Beadera feel like a real premium handmade lifestyle brand, not a generic e-commerce website.
+
+==================================================
+CORE BRAND IDEA
+==================================================
+
+BEADERA is not simply a bead accessories store.
+
+We sell:
+
+EMOTIONS.
+MEMORIES.
+CREATIVITY.
+CONNECTION.
+EXPERIENCES.
+
+Our strongest USP is our WORKSHOP EXPERIENCE.
+
+Customers don't only have to purchase something from Beadera.
+
+They can come to a Beadera workshop, choose their own beads, learn from us, create something with their own hands and then gift that handmade creation to someone they love.
+
+This emotional concept needs to become one of the strongest visual moments on the website.
+
+The website should communicate:
+
+"You could buy a gift.
+
+Or...
+
+you could make the gift."
+
+==================================================
+FIRST: ANALYZE EXISTING WEBSITE
+==================================================
+
+Before changing anything:
+
+1. Inspect the existing homepage.
+2. Inspect Navbar.
+3. Inspect logo implementation.
+4. Inspect product grid.
+5. Inspect product cards.
+6. Inspect existing sections.
+7. Inspect admin panel.
+8. Inspect database/product fetching.
+9. Inspect responsive mobile design.
+10. Inspect existing colors and typography.
+
+Preserve existing functionality.
+
+Only improve UI, UX, storytelling, animations and brand presentation.
+
+Do not break the existing admin panel.
+
+Do not remove existing products.
+
+Do not hardcode products.
+
+Do not replace existing backend functionality unless absolutely necessary.
+
+==================================================
+LOGO UPGRADE
+==================================================
+
+The existing Beadera logo should become a stronger brand element.
+
+Create a circular logo treatment.
+
+Use:
+
+- circular cream/white background
+- thin burgundy border
+- Beadera logo centered inside
+- subtle shadow
+- clean premium appearance
+
+The circle should not distort the logo.
+
+Do NOT crop the actual logo.
+
+Use object-fit: contain.
+
+The logo should feel like a physical handmade brand seal.
+
+Desktop:
+approximately 58–70px
+
+Mobile:
+approximately 48–56px
+
+Navbar should remain elegant and compact.
+
+On scroll, the navbar can become slightly smaller with a smooth transition.
+
+==================================================
+COLOR SYSTEM
+==================================================
+
+Use the existing Beadera visual identity.
+
+Primary:
+
+Deep Burgundy
+#6B1729
+
+Dark Burgundy
+#4A101C
+
+Blush Pink
+#F6E7E8
+
+Soft Pink
+#FBEFF1
+
+Cream
+#FFF9ED
+
+Warm White
+#FFFCFA
+
+Text
+#241B1D
+
+Do not introduce random colors.
+
+Avoid:
+- neon
+- dark backgrounds
+- excessive gradients
+- blue
+- generic purple
+- glassmorphism
+
+The website should feel soft, warm and emotional.
+
+==================================================
+TYPOGRAPHY
+==================================================
+
+Use an elegant serif for major emotional headings.
+
+Suggested:
+
+Playfair Display
+or
+Cormorant Garamond
+
+Use:
+
+Inter / Poppins
+
+for body text and UI.
+
+Use typography to create editorial-style moments.
+
+==================================================
+NAVBAR
+==================================================
+
+Improve the existing navbar without changing its functionality.
+
+Desktop:
+
+[ CIRCULAR BEADERA LOGO ]
+
+Shop
+Workshops
+About
+
+Right side:
+Instagram
+Cart
+
+Keep it minimal.
+
+Add:
+
+- sticky behavior
+- subtle backdrop blur
+- soft background transition
+- slight shadow after scrolling
+
+Mobile:
+
+Circular logo
++
+hamburger menu
+
+Hamburger opens an elegant full-height or slide-in menu.
+
+Menu items:
+
+Shop
+Workshops
+About
+Contact
+
+Add subtle stagger animation when menu items appear.
+
+==================================================
+HERO IMPROVEMENT
+==================================================
+
+Keep the existing hero if it already works, but improve the storytelling.
+
+Main message:
+
+"Little Beads.
+Big Feelings."
+
+Supporting copy:
+
+"Handmade pieces for the people, moments and feelings that mean a little more."
+
+Primary CTA:
+
+"Shop the Collection"
+
+Secondary CTA:
+
+"Make It With Us"
+
+The "Make It With Us" CTA should scroll directly to the Workshop section.
+
+Use subtle floating bead animations.
+
+Do NOT make the beads fly everywhere.
+
+Movement should be slow and elegant.
+
+==================================================
+NEW SECTION — EMOTIONAL BRAND STATEMENT
+==================================================
+
+Create a cinematic section after the hero.
+
+Background:
+soft cream / blush.
+
+Large heading:
+
+"We Don't Just Sell Accessories."
+
+Then animate the next line:
+
+"We Create Emotions."
+
+The second sentence should appear with a smooth word-by-word or fade-up animation.
+
+Below:
+
+"Because sometimes the smallest things carry the biggest feelings."
+
+Then smaller text:
+
+"A bracelet can remind you of someone.
+A charm can hold a memory.
+A handmade gift can say what words sometimes cannot."
+
+Make this section spacious.
+
+Use large typography.
+
+Do NOT fill it with unnecessary graphics.
+
+==================================================
+THE SIGNATURE WORKSHOP SECTION
+==================================================
+
+THIS IS THE MOST IMPORTANT NEW SECTION.
+
+Create a visually outstanding section called:
+
+"Don't Just Buy It.
+Make It."
+
+Alternative small label above:
+
+THE BEADERA WORKSHOP
+
+Main paragraph:
+
+"Some gifts are special because of what they are.
+
+Others are special because of the hands that made them."
+
+Then:
+
+"At Beadera, we help you create something meaningful with your own hands."
+
+Explain the experience:
+
+"You choose the colours.
+You choose the beads.
+You choose who it's for.
+And we guide you through every step."
+
+Then:
+
+"You don't need to know how to make it.
+We'll teach you.
+We'll help you.
+And together, you'll turn a handful of beads into something worth remembering."
+
+==================================================
+EMOTIONAL QUOTE
+==================================================
+
+Create a large visual quote inside the workshop section.
+
+Quote:
+
+"Anyone can buy a gift.
+But making one with your own hands makes the memory part of the gift."
+
+Make this typography-led.
+
+Use quotation marks as a large decorative element.
+
+Animate the quote slowly into view when it enters the viewport.
+
+==================================================
+WORKSHOP VISUAL
+==================================================
+
+Create a two-column layout.
+
+LEFT:
+
+Large workshop image / image placeholder.
+
+The image should show:
+
+- hands working with beads
+- people creating bracelets
+- friends creating together
+- someone making a gift
+
+Do NOT use generic corporate workshop imagery.
+
+The visual should feel warm and candid.
+
+RIGHT:
+
+THE EXPERIENCE
+
+01
+Choose Your Beads
+
+"Pick the colours, shapes and little details that feel right."
+
+02
+Learn With Us
+
+"We'll teach you how to put everything together, step by step."
+
+03
+Make It Yourself
+
+"Create the piece with your own hands."
+
+04
+Give It Meaning
+
+"Take it home and gift it to someone who matters."
+
+Animate each step sequentially as the user scrolls.
+
+==================================================
+WORKSHOP EMOTIONAL STORY
+==================================================
+
+Add a smaller section within or immediately after the workshop.
+
+Heading:
+
+"Make Something They'll Keep."
+
+Text:
+
+"Imagine sitting across from your best friend, your partner, your sibling or someone special.
+
+A table full of beads.
+
+Choosing colours together.
+
+Laughing.
+
+Making something imperfect.
+
+And then giving it to them.
+
+That's the kind of memory Beadera wants to create."
+
+This section should feel personal.
+
+Use generous spacing.
+
+Do not make it sound corporate.
+
+==================================================
+IMPORTANT USP SECTION
+==================================================
+
+Create a highlighted statement:
+
+"THE BEADERA DIFFERENCE"
+
+Then show:
+
+BUY IT
+↓
+beautiful handmade accessory
+
+versus
+
+MAKE IT
+↓
+an experience
++
+your hands
++
+your creativity
++
+your story
++
+a gift
+
+Final statement:
+
+"With Beadera, the gift isn't only what you make.
+
+It's the memory of making it."
+
+This is one of the most important lines on the entire website.
+
+Make this section visually memorable.
+
+==================================================
+WORKSHOP CTA
+==================================================
+
+End the workshop experience with a strong CTA.
+
+Heading:
+
+"Ready to Make Something Meaningful?"
+
+Text:
+
+"Bring your people.
+We'll bring the beads.
+You bring the story."
+
+Buttons:
+
+"Join a Workshop"
+
+"Plan a Private Workshop"
+
+Use burgundy filled button + cream outline/secondary button.
+
+Clicking should scroll to the workshop enquiry form or open the workshop booking form.
+
+==================================================
+WORKSHOP BOOKING FORM
+==================================================
+
+Improve the existing form if one exists.
+
+Fields:
+
+Name
+Phone
+Email
+Number of people
+Workshop type
+Preferred date
+Preferred time
+Message
+
+Workshop types:
+
+Individual
+Couples
+Friends
+Birthday
+College Group
+Private Event
+Other
+
+CTA:
+
+"Let's Create Together"
+
+After submission:
+
+"Your workshop story starts here. We'll get in touch with you soon."
+
+Do not expose database credentials.
+
+==================================================
+PRODUCT SECTION
+==================================================
+
+Keep the existing product grid and product functionality.
+
+Improve visual presentation.
+
+Desktop:
+4 products per row
+
+Tablet:
+3 products per row
+
+Mobile:
+2 products per row
+
+Product cards:
+
+- large image
+- clean cream/white background
+- product name
+- price
+- optional badge
+- subtle hover effect
+
+Add:
+
+image scale 1 → 1.04
+
+on hover.
+
+Do NOT make the cards overly rounded.
+
+Keep them premium.
+
+==================================================
+EMOTIONAL SHOPPING CATEGORIES
+==================================================
+
+Instead of only:
+
+Bracelets
+Keychains
+Charms
+
+Add an emotional discovery section:
+
+"Who Are You Making It For?"
+
+Cards:
+
+FOR YOUR BEST FRIEND
+
+FOR YOUR PERSON
+
+FOR YOURSELF
+
+FOR A MEMORY
+
+FOR A NEW BEGINNING
+
+FOR SOMEONE SPECIAL
+
+Each card should have a beautiful bead/product image.
+
+Hover:
+
+Image slightly zooms.
+
+Text moves upward slightly.
+
+Add subtle arrow.
+
+These should feel like editorial collection cards.
+
+==================================================
+ABOUT SECTION
+==================================================
+
+Upgrade the About section.
+
+Heading:
+
+"More Than Beads."
+
+Text:
+
+"Beadera began with a simple idea:
+
+What if accessories could carry a little more meaning?"
+
+Then:
+
+"We create handmade bead pieces for people who want to express something — love, friendship, memories, personality or simply a little happiness."
+
+Then:
+
+"But Beadera is also about creating together.
+
+Our workshops let you slow down, make something with your own hands and turn an ordinary afternoon into a memory."
+
+Final line:
+
+"Because the things we make ourselves often mean the most."
+
+==================================================
+ANIMATIONS
+==================================================
+
+Add premium subtle animations throughout the website.
+
+Use Framer Motion if already installed.
+
+Otherwise use lightweight CSS animations.
+
+Required animations:
+
+1. Hero fade-up
+
+2. Logo subtle scale on page load
+
+3. Navbar transition on scroll
+
+4. Product image hover zoom
+
+5. Product card hover lift
+
+6. Emotional statement reveal
+
+7. Workshop quote reveal
+
+8. Workshop image parallax / subtle movement
+
+9. Workshop steps stagger animation
+
+10. Emotional collection card hover
+
+11. About section fade-up
+
+12. Footer reveal
+
+Use viewport-based animations.
+
+Elements should animate once when entering viewport.
+
+Avoid excessive animation.
+
+NO:
+- bouncing
+- spinning
+- neon effects
+- giant moving objects
+- distracting parallax
+
+The animation should feel like a premium lifestyle brand.
+
+==================================================
+BEAD ANIMATION
+==================================================
+
+Introduce a subtle brand animation.
+
+Use tiny bead-shaped circles in burgundy, blush and cream.
+
+They can gently float around specific sections.
+
+Keep opacity low.
+
+Movement:
+
+slow floating
+slight rotation
+very small vertical movement
+
+They should look like decorative beads, not bubbles.
+
+Only use them in:
+
+Hero
+Emotional Statement
+Workshop
+
+Do not put them everywhere.
+
+==================================================
+SCROLL EXPERIENCE
+==================================================
+
+Create a storytelling journey.
+
+The website should feel like:
+
+DISCOVER
+↓
+FEEL
+↓
+SHOP
+↓
+IMAGINE
+↓
+CREATE
+↓
+CONNECT
+↓
+GIFT
+
+The workshop section should feel like the climax of the page.
+
+==================================================
+MOBILE EXPERIENCE
+==================================================
+
+Mobile is extremely important.
+
+At 360px / 390px / 430px:
+
+- no horizontal scrolling
+- perfect spacing
+- readable typography
+- 2 product cards per row
+- circular logo
+- hamburger menu
+- workshop image stacked above text
+- workshop steps stacked vertically
+- buttons full-width where appropriate
+- comfortable touch targets
+
+Do not simply shrink desktop.
+
+Actually redesign the spacing for mobile.
+
+==================================================
+MICROCOPY
+==================================================
+
+Use emotional language throughout the website.
+
+Instead of:
+
+"View Products"
+
+Use:
+
+"Find Your Piece"
+
+Instead of:
+
+"Book Workshop"
+
+Use:
+
+"Create With Us"
+
+Instead of:
+
+"Shop Now"
+
+Use:
+
+"Find Something Meaningful"
+
+Instead of:
+
+"Products"
+
+Use:
+
+"Made With Feeling"
+
+Keep the copy short and natural.
+
+Do not overdo emotional language.
+
+==================================================
+PERFORMANCE
+==================================================
+
+Do not sacrifice performance for animations.
+
+Use:
+
+- Next.js Image
+- lazy loading
+- optimized images
+- responsive image sizes
+- minimal JavaScript where possible
+
+Animations should not cause noticeable lag.
+
+==================================================
+FINAL DESIGN DIRECTION
+==================================================
+
+The final website should feel like:
+
+A premium handmade accessories brand
++
+a creative workshop studio
++
+an emotional gifting experience.
+
+The visitor should leave thinking:
+
+"I can buy something beautiful here."
+
+But more importantly:
+
+"I can make something beautiful here for someone I love."
+
+The website's central message should be:
+
+BEADERA
+
+"Little Beads.
+Big Feelings."
+
+And the signature USP:
+
+"Don't just buy the gift.
+Make it."
+
+==================================================
+FINAL CHECK
+==================================================
+
+Before finishing:
+
+- Test desktop
+- Test tablet
+- Test mobile
+- Test hamburger menu
+- Test product grid
+- Test product detail
+- Test cart
+- Test admin
+- Test image uploads
+- Test workshop form
+- Test navigation anchors
+- Test animations
+- Test all buttons
+- Check console for errors
+- Check broken images
+- Check responsive overflow
+
+DO NOT break existing functionality.
+
+Make the website feel launch-ready and emotionally memorable.
